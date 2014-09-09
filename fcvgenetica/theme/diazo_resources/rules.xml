@@ -2,44 +2,103 @@
 <rules
     xmlns="http://namespaces.plone.org/diazo"
     xmlns:css="http://namespaces.plone.org/diazo/css"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <!-- Apply the following rules to standard Plone pages -->
+    <!-- The default theme, used for standard Plone web pages -->
+    <theme href="index.html" css:if-content="#visual-portal-wrapper" />
+    <notheme if-path="@@manage-viewlets" />
+    <notheme if="$ajax_load" />
+    <xsl:template css:match="#portal-colophon">
+        <div id="portal-colophon">
+            <p class="credits"><a href="http://themes.quintagroup.com">SunRain Plone Theme</a> by <a href="http://quintagroup.com">Quintagroup</a> © 2013.</p>
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
+    <!-- Rules applying to a standard Plone web page -->
     <rules css:if-content="#visual-portal-wrapper">
+        <!-- Add meta tags -->
+        <drop css:theme="meta[http-equiv='Content-Type']" />
+        <drop css:content="meta[name='viewport']" />
+        <drop css:theme="link[href$='rain.css']" if="$theme = 'sun'" />
+        <drop css:theme="link[href$='sun.css']" if="$theme != 'sun'" />
+	<drop css:content="link[href*='reset']" />
+        <drop css:content="link[href$='public.css']" />
+        <drop css:content="link[href$='columns.css']" />
+	<drop css:content="link[href$='forms.css']" />
+        <drop css:content="link[href$='portlets.css']" />
+        <drop css:content="link[href$='discussion.css']" />
+	<drop css:content="link[href$='controlpanel.css']" />
+	<drop css:content="link[href$='authoring.css']" />
+        <drop css:content="link[href$='ploneKss.css']" />
+        <drop css:content="link[href$='print.css']" />
+        <drop css:content="link[href$='mobile.css']" />
+        <drop css:content="link[href*='base']" />
+        <drop css:content="link[href$='favicon.ico']" />
+        <before content="/html/head/meta" css:theme="meta[name='viewport']" />
+        <before content="/html/head/base" theme="/html/head/title" />
+        <replace theme='/html/head/title' content='/html/head/title' />
 
-        <theme href="index.html" />
+        <!-- Copy style, script and link tags in the order they appear in the content -->
+        <after css:content="head link:not([href*='ploneCustom'])" theme="/html/head/title" />
+        <after content="/html/head/style | /html/head/script" theme="/html/head/title" />
+        <after css:content="head link[href*='ploneCustom']" theme-children="/html/head" />
 
-        <!-- Replace title with Plone's page title  -->
-        <replace css:theme="html head title" css:content="html head title" />
+        <!-- Copy over the id/class attributes on the body tag.
+             This is important for per-section styling -->
+        <merge attributes="dir class" css:content="body" css:theme="body" />
 
-        <!-- Drop the favicon spec coming from content; we'll use the one in the theme. -->
-        <drop content="/html/head/link[@rel='shortcut icon']" />
+        <!-- Skip Links -->
+        <before css:content="#portal-header > p.hiddenStructure:first-child" css:theme-children="#portal-header" />
 
-        <!-- Copy base tag from Plone -->
-        <before css:theme-children="html head" css:content="html head base" />
+        <!-- Logo -->
+        <replace css:content="#portal-logo" css:theme="#portal-logo" />
 
-        <!-- Copy link, style, meta tags from Plone head -->
-        <after css:theme-children="html head"
-               content="/html/head/link | /html/head/style | /html/head/meta" />
+        <!-- Portal Slogan -->
+        <replace css:theme="#portal-slogan">
+          <span id="portal-slogan"><xsl:value-of select="$slogan"/></span>
+        </replace>
 
-        <!-- merge classes from Plone body with theme body -->
-        <merge attributes="class" css:theme="body" css:content="body" />
+        <!-- Site actions -->
+        <replace css:content="#portal-siteactions" css:theme="#portal-siteactions" method="raw" />
+        <drop css:content="#portal-siteactions" /> 
 
-        <!-- Copy script tags from Plone head to end of body -->
-        <after css:theme-children="html body" css:content="html head script" />
+        <!-- Portal languageselector -->
+        <replace css:content="#portal-languageselector" css:theme="#portal-languageselector" />
 
-        <!-- Move inline scripts in content to end of body -->
-        <drop css:content="body script" />
-        <after css:theme-children="html body" css:content="html body script" method="raw" />
+        <!-- Global navigation -->
+        <replace css:content-children='#portal-globalnav' css:theme-children='#theme-globalnav' />
+	<before css:theme="#theme-globalnav" css:content="#portal-logo+p.hiddenStructure" />
+	<after css:theme="#theme-globalnav" css:content="#portal-globalnav-mobile" />
+	<merge attributes="class" css:content="#portal-globalnav" css:theme="#theme-globalnav" css:if-content="#portal-globalnav-mobile" />
 
-        <!-- Insert your own rules here -->
+        <!-- Portal-searchbox -->
+        <replace css:content='#portal-searchbox' css:theme='#portal-searchbox' />
 
-        <!-- This rule pulls in the whole Plone layout. You'll typically replace this
-             with rules that copy particular parts of the content into particular
-             targets in your theme.
-         -->
-        <after css:theme="body p" css:content="#visual-portal-wrapper" />
+        <!-- Portal-Personaltools -->
+        <replace css:content="#portal-personaltools-wrapper" css:theme="#portal-personaltools-wrapper"/>
+
+         <!-- Breadcrumbs -->
+        <drop css:content="#portal-breadcrumbs" /> 
+        <replace css:content="#portal-breadcrumbs" css:theme="#portal-breadcrumbs" method="raw"/>
+
+        <after css:theme="#theme-globalnav" css:content="#portlets-in-header" />
+        <after css:theme="#theme-globalnav" css:content=".manageInHeaderPortletsLink" />
+
+        <!-- Document Content -->
+        <strip css:content="#portal-column-content > div:not(#viewlet-above-content):not(#viewlet-below-content)" if-content="//div[@id='portal-column-content']/div/div[@id='content']" />
+        <replace css:content="#portal-column-content" css:theme="#portal-column-content" />
+        <drop css:content="img[alt='Image'][src$='image.png']" />
+        <drop css:content="img[alt='File'][src$='image.png']" /> 
+        <drop css:content="#plone-contentmenu-factories li a img" />
+
+        <!-- Columns -->
+        <replace css:content="#portal-column-one" css:theme="#portal-column-one" />
+        <replace css:content="#portal-column-two" css:theme="#portal-column-two" />
+
+        <!-- Footer -->
+        <replace css:content="#portal-footer" css:theme="#portal-footer-wrapper" />
 
     </rules>
-
+    <xi:include href="tune.xml" />
 </rules>
