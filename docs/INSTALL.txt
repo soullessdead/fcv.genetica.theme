@@ -1,16 +1,16 @@
-fcvgenetica.theme Installation
-------------------------------
+fcv.genetica.theme Installation
+-------------------------------
 
-To install fcvgenetica.theme using zc.buildout and the plone.recipe.zope2instance
+To install fcv.genetica.theme using zc.buildout and the plone.recipe.zope2instance
 recipe to manage your project, you can do this:
 
-* Add ``fcvgenetica.theme`` to the list of eggs to install, e.g.:
+* Add ``fcv.genetica.theme`` to the list of eggs to install, e.g.:
 
     [buildout]
     ...
     eggs =
         ...
-        fcvgenetica.theme
+        fcv.genetica.theme
        
 * Re-run buildout, e.g. with:
 

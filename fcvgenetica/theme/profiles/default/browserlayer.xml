@@ -3,6 +3,6 @@
      so that it will be activated
      when this product is installed. -->
 <layers>
-    <layer name="fcvgenetica.theme.customization.layer"
-      interface="fcvgenetica.theme.interfaces.ICustomTheme" />
+    <layer name="fcv.genetica.theme.customization.layer"
+      interface="fcv.genetica.theme.interfaces.ICustomTheme" />
 </layers>

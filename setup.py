@@ -3,7 +3,7 @@ import os
 
 version = '0.1'
 
-setup(name='fcvgenetica.theme',
+setup(name='fcv.genetica.theme',
       version=version,
       description="Tema del proyecto genetica animal",
       long_description=open("README.txt").read() + "\n" +
@@ -21,7 +21,7 @@ setup(name='fcvgenetica.theme',
       url='https://github.com/soullessdead/fcv.genetica.theme',
       license='GPL version 2',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['fcvgenetica'],
+      namespace_packages=['fcv', 'fcv.genetica'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[

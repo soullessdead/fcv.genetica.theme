@@ -26,7 +26,7 @@
 
 <!--
  <stylesheet title=""
-    id="++theme++fcvgenetica.theme/static/main.css"
+    id="++theme++fcv.genetica.theme/static/main.css"
     media="screen" rel="stylesheet" rendering="import"
     cacheable="True" compression="safe" cookable="True"
     enabled="1" expression="" />
